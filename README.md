@@ -168,8 +168,41 @@ docker-compose logs mongo
 docker-compose ps
 ```
 
-## Segurança
+## Testes
 
-- Nunca exponha sua `MONGO_URI` publicamente
-- Use variáveis de ambiente para configurações sensíveis
-- Mantenha suas dependências atualizadas
+Este projeto inclui uma suíte de testes automatizados utilizando o framework **Jest** para garantir a qualidade e o funcionamento das funcionalidades implementadas.
+
+### Configuração para Testes
+
+1. **Rodar os Testes**:
+
+   ```bash
+   npm test
+   ```
+
+2. **Cobertura de Código**:
+   Para gerar um relatório de cobertura de código:
+   ```bash
+   npm test -- --coverage
+   ```
+
+### Estrutura dos Testes
+
+Os testes estão localizados no diretório `__tests__` e cobrem as principais rotas e funcionalidades da aplicação, incluindo:
+
+- **POST /url**:
+  - Verifica se uma URL curta é criada corretamente.
+  - Retorna erro se a URL não for fornecida.
+- **GET /:shortId**:
+
+  - Testa o redirecionamento para a URL original.
+  - Verifica o comportamento para IDs inválidos.
+
+- **GET /analytics/:shortId**:
+  - Garante que as estatísticas de cliques e visitas sejam retornadas corretamente.
+  - Retorna erro para IDs inexistentes.
+
+### Solução de Problemas com Testes
+
+- **Conexão com o MongoDB em Memória**:
+  Os testes utilizam o `mongodb-memory-server` para criar um banco de dados MongoDB em memória, garantindo isolamento dos dados e limpeza automática após cada teste.
