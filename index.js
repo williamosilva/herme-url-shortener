@@ -9,7 +9,6 @@ require("dotenv").config();
 
 const MONGO_URI = process.env.MONGO_URI || "mongodb://mongo:27017/hermedb";
 
-console.log("Connecting to MongoDB with URI:", MONGO_URI);
 connectMongoDB(MONGO_URI)
   .then(() => {
     console.log("Connected to MongoDB");
