@@ -1,0 +1,30 @@
+version: "3.8"
+services:
+  app:
+    build: .
+    container_name: herme-url-shortener
+    ports:
+      - "8001:8001"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/hermedb
+    depends_on:
+      - mongo
+    networks:
+      - herme-network
+
+  mongo:
+    image: mongo
+    container_name: herme-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - herme-network
+
+networks:
+  herme-network:
+    driver: bridge
+
+volumes:
+  mongo-data:
