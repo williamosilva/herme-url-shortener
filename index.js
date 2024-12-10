@@ -9,6 +9,7 @@ const PORT = 8001;
 require("dotenv").config();
 
 const MONGO_URI = process.env.MONGO_URI || "mongodb://mongo:27017/hermedb";
+const API_KEY = process.env.API_KEY; // Adicione a chave de API ao arquivo .env
 
 const allowedOrigin = "https://herme-url-shortener-front.vercel.app/";
 const corsOptions = {
@@ -22,6 +23,15 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+
+app.use((req, res, next) => {
+  const apiKey = req.headers["x-api-key"];
+  if (apiKey === API_KEY) {
+    next();
+  } else {
+    res.status(403).json({ message: "Forbidden: Invalid API Key" });
+  }
+});
 
 connectMongoDB(MONGO_URI)
   .then(() => {
