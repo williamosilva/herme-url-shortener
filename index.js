@@ -10,7 +10,7 @@ require("dotenv").config();
 
 const allowedOrigins = [
   "https://herme-url-shortener-front.vercel.app/",
-  "http://localhost:5173",
+  "http://localhost:5173/",
 ];
 
 const MONGO_URI = process.env.MONGO_URI || "mongodb://mongo:27017/hermedb";
