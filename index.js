@@ -8,7 +8,10 @@ const PORT = 8001;
 
 require("dotenv").config();
 
-const allowedOrigins = ["https://hur-f.vercel.app", "http://localhost:5173"];
+const allowedOrigins = [
+  "https://herme-url-shortener-front.vercel.app/",
+  "http://localhost:5173",
+];
 
 const MONGO_URI = process.env.MONGO_URI || "mongodb://mongo:27017/hermedb";
 const API_KEY = process.env.API_KEY;
