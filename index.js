@@ -11,7 +11,8 @@ require("dotenv").config();
 const MONGO_URI = process.env.MONGO_URI || "mongodb://mongo:27017/hermedb";
 const API_KEY = process.env.API_KEY; // Adicione a chave de API ao arquivo .env
 
-const allowedOrigin = "https://herme-url-shortener-front.vercel.app/";
+const allowedOrigin =
+  "https://herme-url-shortener-front.vercel.app/" || "http://localhost:5173/";
 const corsOptions = {
   origin: function (origin, callback) {
     if (!origin || origin === allowedOrigin) {
