@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 const connectMongoDB = require("./connect");
 const urlRouter = require("./routes/url");
 const app = express();
@@ -8,6 +9,19 @@ const PORT = 8001;
 require("dotenv").config();
 
 const MONGO_URI = process.env.MONGO_URI || "mongodb://mongo:27017/hermedb";
+
+const allowedOrigin = "https://herme-url-shortener-front.vercel.app/";
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || origin === allowedOrigin) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+};
+
+app.use(cors(corsOptions));
 
 connectMongoDB(MONGO_URI)
   .then(() => {
