@@ -18,6 +18,7 @@ const API_KEY = process.env.API_KEY;
 
 const corsOptions = {
   origin: function (origin, callback) {
+    console.log("Request origin:", origin);
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
@@ -27,6 +28,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+app.use(express.json());
 
 // Rota para redirecionamento fica antes do middleware de API key
 app.get("/:shortId", async (req, res) => {
@@ -69,8 +71,6 @@ connectMongoDB(MONGO_URI)
   .catch((err) => {
     console.error("Error connecting to MongoDB:", err);
   });
-
-app.use(express.json());
 
 app.use("/url", urlRouter);
 
