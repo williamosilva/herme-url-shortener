@@ -13,20 +13,17 @@ const PORT = process.env.PORT;
 
 app.use(express.json());
 
-// Rota para redirecionamento
 app.get("/:shortId", async (req, res) => {
   const shortId = req.params.shortId;
 
   try {
-    // Use findOne para evitar overhead desnecessário
     const entry = await URL.findOne({ shortId });
 
     if (entry) {
-      // Atualização em background para não bloquear a resposta
       URL.updateOne(
         { shortId },
         { $push: { visitHistory: { timestamp: Date.now() } } }
-      ).exec(); // Executa sem await
+      ).exec();
 
       res.redirect(entry.redirectURL);
     } else {
