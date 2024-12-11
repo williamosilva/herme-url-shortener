@@ -9,7 +9,7 @@ const PORT = 8001;
 require("dotenv").config();
 
 const allowedOrigins = [
-  "https://herme-url-shortener-front.vercel.app",
+  "https://herme-url.vercel.app",
   "http://localhost:5173",
 ];
 
@@ -30,22 +30,19 @@ app.use(cors(corsOptions));
 
 // Rota para redirecionamento fica antes do middleware de API key
 app.get("/:shortId", async (req, res) => {
-  try {
-    const shortId = req.params.shortId;
+  const shortId = req.params.shortId;
 
-    const entry = await URL.findOneAndUpdate(
-      { shortId },
-      {
-        $push: {
-          visitHistory: {
-            timestamp: Date.now(),
-          },
-        },
-      },
-      { new: true }
-    );
+  try {
+    // Use findOne em vez de findOneAndUpdate para reduzir overhead
+    const entry = await URL.findOne({ shortId });
 
     if (entry) {
+      // Atualização em background para não bloquear a resposta
+      URL.updateOne(
+        { shortId },
+        { $push: { visitHistory: { timestamp: Date.now() } } }
+      ).exec(); // Executa sem await
+
       res.redirect(entry.redirectURL);
     } else {
       res.status(404).send("Short URL not found");
@@ -55,15 +52,13 @@ app.get("/:shortId", async (req, res) => {
     res.status(500).send("Internal server error");
   }
 });
-
-// Middleware de API key para todas as outras rotas
+// Middleware de API key com early return
 app.use((req, res, next) => {
   const apiKey = req.headers["x-api-key"];
-  if (apiKey === API_KEY) {
-    next();
-  } else {
-    res.status(403).json({ message: "Forbidden: Invalid API Key" });
+  if (!apiKey || apiKey !== API_KEY) {
+    return res.status(403).json({ message: "Forbidden: Invalid API Key" });
   }
+  next();
 });
 
 // Resto do seu código permanece o mesmo
