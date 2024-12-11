@@ -3,13 +3,13 @@ const connectMongoDB = require("./connect");
 const urlRouter = require("./routes/url");
 const app = express();
 const URL = require("./models/url");
-const PORT = 8001;
 
 require("dotenv").config();
 
 const MONGO_URI = process.env.MONGO_URI;
 // const MONGO_URI = "mongodb://mongo:27017/hermedb";
 const API_KEY = process.env.API_KEY;
+const PORT = process.env.PORT;
 
 app.use(express.json());
 
