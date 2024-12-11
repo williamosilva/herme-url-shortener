@@ -1,5 +1,4 @@
 const express = require("express");
-const cors = require("cors");
 const connectMongoDB = require("./connect");
 const urlRouter = require("./routes/url");
 const app = express();
@@ -8,34 +7,17 @@ const PORT = 8001;
 
 require("dotenv").config();
 
-const allowedOrigins = [
-  "https://herme-url.vercel.app",
-  "http://localhost:5173",
-];
-
 const MONGO_URI = process.env.MONGO_URI || "mongodb://mongo:27017/hermedb";
 const API_KEY = process.env.API_KEY;
 
-const corsOptions = {
-  origin: function (origin, callback) {
-    console.log("Request origin:", origin);
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-};
-
-app.use(cors(corsOptions));
 app.use(express.json());
 
-// Rota para redirecionamento fica antes do middleware de API key
+// Rota para redirecionamento
 app.get("/:shortId", async (req, res) => {
   const shortId = req.params.shortId;
 
   try {
-    // Use findOne em vez de findOneAndUpdate para reduzir overhead
+    // Use findOne para evitar overhead desnecessário
     const entry = await URL.findOne({ shortId });
 
     if (entry) {
@@ -54,7 +36,8 @@ app.get("/:shortId", async (req, res) => {
     res.status(500).send("Internal server error");
   }
 });
-// Middleware de API key com early return
+
+// Middleware de validação da API Key
 app.use((req, res, next) => {
   const apiKey = req.headers["x-api-key"];
   if (!apiKey || apiKey !== API_KEY) {
@@ -63,7 +46,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// Resto do seu código permanece o mesmo
+// Conexão com o MongoDB
 connectMongoDB(MONGO_URI)
   .then(() => {
     console.log("Connected to MongoDB");
@@ -72,8 +55,10 @@ connectMongoDB(MONGO_URI)
     console.error("Error connecting to MongoDB:", err);
   });
 
+// Rotas da API
 app.use("/url", urlRouter);
 
+// Inicia o servidor
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
