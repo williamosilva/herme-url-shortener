@@ -54,7 +54,6 @@ app.use((req, res, next) => {
   next();
 });
 
-// Conexão com o MongoDB
 connectMongoDB(MONGO_URI)
   .then(() => {
     console.log("Connected to MongoDB");
@@ -63,10 +62,8 @@ connectMongoDB(MONGO_URI)
     console.error("Error connecting to MongoDB:", err);
   });
 
-// Rotas da API
 app.use("/url", urlRouter);
 
-// Inicia o servidor
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

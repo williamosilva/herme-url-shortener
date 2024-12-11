@@ -32,9 +32,16 @@ Herme URL Shortener é uma aplicação para encurtamento de URLs, desenvolvida c
 Crie um arquivo `.env` na raiz do projeto com a seguinte configuração:
 
 ```env
+#API_KEY, serve para segurança com o uso da API, apenas quem a tem no header da requisição consegue usar as barras
+API_KEY='xxxxxxxxxxx'
+
 # URI de conexão com o MongoDB
 # Use sua própria URI de conexão (MongoDB Atlas, local, etc.)
 MONGO_URI=mongodb+srv://seu_usuario:sua_senha@seu_cluster.mongodb.net/herme-url-shortener?retryWrites=true&w=majority
+
+#Porta
+PORT='0000'
+
 ```
 
 ### Instalação e Execução
