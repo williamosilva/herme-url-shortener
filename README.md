@@ -1,23 +1,23 @@
 # Herme URL Shortener
 
-## Descrição do Projeto
+## Project Description
 
-Herme URL Shortener é uma aplicação para encurtamento de URLs, desenvolvida com Node.js, MongoDB e Docker. O projeto permite criar URLs curtas e personalizadas, facilitando o compartilhamento de links longos.
+Herme URL Shortener is a URL shortening application developed with Node.js, MongoDB, and Docker. The project allows you to create short and customized URLs, making it easier to share long links.
 
-## Funcionalidades
+## Features
 
-- Geração de URLs curtas únicas
-- Redirecionamento de URLs encurtadas
-- Registro de histórico de visitas
-- Ambiente containerizado com Docker
+- Generation of unique short URLs
+- Short URL redirection
+- Visit history logging
+- Containerized environment with Docker
 
-## Pré-requisitos
+## Prerequisites
 
-- Docker (versão 20.10 ou superior)
-- Docker Compose (versão 1.29 ou superior)
-- Node.js 16+ (opcional, para desenvolvimento local)
+- Docker (version 20.10 or higher)
+- Docker Compose (version 1.29 or higher)
+- Node.js 16+ (optional, for local development)
 
-## Tecnologias Utilizadas
+## Technologies Used
 
 - Node.js
 - Express.js
@@ -25,52 +25,51 @@ Herme URL Shortener é uma aplicação para encurtamento de URLs, desenvolvida c
 - Docker
 - Docker Compose
 
-## Configuração do Ambiente
+## Environment Setup
 
-### Variáveis de Ambiente
+### Environment Variables
 
-Crie um arquivo `.env` na raiz do projeto com a seguinte configuração:
+Create a `.env` file in the project root with the following configuration:
 
 ```env
-#API_KEY, serve para segurança com o uso da API, apenas quem a tem no header da requisição consegue usar as barras
+#API_KEY is for API security, only those who have it in the request header can use the endpoints
 API_KEY='xxxxxxxxxxx'
 
-# URI de conexão com o MongoDB
-# Use sua própria URI de conexão (MongoDB Atlas, local, etc.)
-MONGO_URI=mongodb+srv://seu_usuario:sua_senha@seu_cluster.mongodb.net/herme-url-shortener?retryWrites=true&w=majority
+# MongoDB connection URI
+# Use your own connection URI (MongoDB Atlas, local, etc.)
+MONGO_URI=mongodb+srv://your_user:your_password@your_cluster.mongodb.net/herme-url-shortener?retryWrites=true&w=majority
 
-#Porta
+#Port
 PORT='0000'
-
 ```
 
-### Instalação e Execução
+### Installation and Execution
 
-#### Desenvolvimento
+#### Development
 
 ```bash
-# Construir os containers
+# Build containers
 docker-compose build
-# Iniciar os containers
+# Start containers
 docker-compose up
-# Iniciar em modo background
+# Start in background mode
 docker-compose up -d
 ```
 
-#### Produção
+#### Production
 
 ```bash
-# Construir para produção
+# Build for production
 docker-compose -f docker-compose.prod.yml up -d
 ```
 
-#### Parar Containers
+#### Stop Containers
 
 ```bash
 docker-compose down
 ```
 
-## Estrutura do Projeto
+## Project Structure
 
 ```
 herme-url-shortener/
@@ -86,130 +85,130 @@ herme-url-shortener/
 └── README.md
 ```
 
-## Configurações Importantes
+## Important Settings
 
-- Porta padrão: 8001
-- Banco de dados: MongoDB
-- Ambiente: Containerizado
+- Default port: 8001
+- Database: MongoDB
+- Environment: Containerized
 
-## Rotas da Aplicação
+## Application Routes
 
-### Rota de Encurtamento de URL
+### URL Shortening Route
 
 ```javascript
 router.post("/");
 ```
 
-- **Descrição**: Cria uma nova URL encurtada
-- **Método**: POST
-- **Corpo da Requisição**:
+- **Description**: Creates a new shortened URL
+- **Method**: POST
+- **Request Body**:
   ```json
   {
-    "url": "URL original a ser encurtada"
+    "url": "Original URL to be shortened"
   }
   ```
-- **Resposta de Sucesso**:
+- **Success Response**:
   ```json
   {
     "id": "shortId"
   }
   ```
-- **Códigos de Status**:
-  - `201`: URL encurtada com sucesso
-  - `400`: URL não fornecida
+- **Status Codes**:
+  - `201`: URL shortened successfully
+  - `400`: URL not provided
 
-### Rota de Redirecionamento
+### Redirection Route
 
 ```javascript
 app.get("/:shortId");
 ```
 
-- **Descrição**: Redireciona para a URL original e registra visita
-- **Método**: GET
-- **Parâmetros**:
-  - `shortId`: Identificador curto da URL
-- **Comportamento**:
-  - Redireciona para URL original
-  - Registra timestamp da visita
-- **Códigos de Status**:
-  - Redirecionamento bem-sucedido
-  - `404`: URL encurtada não encontrada
-  - `500`: Erro interno do servidor
+- **Description**: Redirects to original URL and logs visit
+- **Method**: GET
+- **Parameters**:
+  - `shortId`: Short URL identifier
+- **Behavior**:
+  - Redirects to original URL
+  - Records visit timestamp
+- **Status Codes**:
+  - Successful redirection
+  - `404`: Short URL not found
+  - `500`: Internal server error
 
-### Rota de Analytics
+### Analytics Route
 
 ```javascript
 router.get("/analytics/:shortId");
 ```
 
-- **Descrição**: Obtém estatísticas de uma URL encurtada
-- **Método**: GET
-- **Parâmetros**:
-  - `shortId`: Identificador curto da URL
-- **Resposta de Sucesso**:
+- **Description**: Gets statistics for a shortened URL
+- **Method**: GET
+- **Parameters**:
+  - `shortId`: Short URL identifier
+- **Success Response**:
   ```json
   {
     "totalClicks": 10,
     "analytics": [{ "timestamp": 1623456789 }, { "timestamp": 1623456790 }]
   }
   ```
-- **Códigos de Status**:
-  - `200`: Estatísticas retornadas com sucesso
-  - `404`: URL encurtada não encontrada
+- **Status Codes**:
+  - `200`: Statistics returned successfully
+  - `404`: Short URL not found
 
-## Solução de Problemas
+## Troubleshooting
 
-### Verificação de Logs
+### Checking Logs
 
 ```bash
-# Logs gerais
+# General logs
 docker-compose logs
-# Logs de um serviço específico
+# Specific service logs
 docker-compose logs app
 docker-compose logs mongo
 ```
 
-### Verificar Containers
+### Check Containers
 
 ```bash
 docker-compose ps
 ```
 
-## Testes
+## Tests
 
-Este projeto inclui uma suíte de testes automatizados utilizando o framework **Jest** para garantir a qualidade e o funcionamento das funcionalidades implementadas.
+This project includes an automated test suite using the **Jest** framework to ensure the quality and functionality of the implemented features.
 
-### Configuração para Testes
+### Test Configuration
 
-1. **Rodar os Testes**:
+1. **Run Tests**:
 
    ```bash
    npm test
    ```
 
-2. **Cobertura de Código**:
-   Para gerar um relatório de cobertura de código:
+2. **Code Coverage**:
+   To generate a code coverage report:
    ```bash
    npm test -- --coverage
    ```
 
-### Estrutura dos Testes
+### Test Structure
 
-Os testes estão localizados no diretório `__tests__` e cobrem as principais rotas e funcionalidades da aplicação, incluindo:
+Tests are located in the `__tests__` directory and cover the main routes and functionalities of the application, including:
 
 - **POST /url**:
-  - Verifica se uma URL curta é criada corretamente.
-  - Retorna erro se a URL não for fornecida.
+  - Verifies if a short URL is created correctly.
+  - Returns error if URL is not provided.
 - **GET /:shortId**:
 
-  - Testa o redirecionamento para a URL original.
-  - Verifica o comportamento para IDs inválidos.
+  - Tests redirection to original URL.
+  - Verifies behavior for invalid IDs.
 
 - **GET /analytics/:shortId**:
-  - Garante que as estatísticas de cliques e visitas sejam retornadas corretamente.
-  - Retorna erro para IDs inexistentes.
+  - Ensures click and visit statistics are returned correctly.
+  - Returns error for non-existent IDs.
 
-### Solução de Problemas com Testes
+### Test Troubleshooting
 
-- **Conexão com o MongoDB em Memória**:
-  Os testes utilizam o `mongodb-memory-server` para criar um banco de dados MongoDB em memória, garantindo isolamento dos dados e limpeza automática após cada teste.
+- **In-Memory MongoDB Connection**:
+  Tests use `mongodb-memory-server` to create an in-memory MongoDB database, ensuring data isolation and automatic cleanup after each test.
